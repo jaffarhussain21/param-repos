@@ -30,11 +30,12 @@ public class UserDaoService {
 		return null;
 	}
 
-	public void save(User user) {
+	public User save(User user) {
 		if (user.getId() == 0) {
 			user.setId(++counter);
 		}
 		userList.add(user);
+		return user;
 	}
 
 	public void delete(int id) {
