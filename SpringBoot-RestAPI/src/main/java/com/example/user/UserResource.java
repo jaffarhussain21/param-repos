@@ -18,28 +18,30 @@ public class UserResource {
 	@Autowired
 	UserDaoService userDaoService;
 
-	@GetMapping("/getUsers")
+	@GetMapping("/users")
 	public List<User> retrieveAllUsers() {
 		return userDaoService.findAll();
 	}
 
-	@GetMapping("/getUsers/{id}")
+	@GetMapping("/users/{id}")
 	public User retieveUser(@PathVariable int id) {
-		 User user = userDaoService.findOne(id);
-		 if(user == null) {
-			 throw new UserNotFoundException("This user not found !!! "+id);
-		 }
-		 
-		 return user;
+		User user = userDaoService.findOne(id);
+		if (user == null) {
+			throw new UserNotFoundException("This user not found !!! " + id);
+		}
+
+		return user;
 	}
 
 	@PostMapping("/users")
 	public ResponseEntity<User> createUser(@RequestBody User user) {
-		User saveUser = userDaoService.save(user);
-		java.net.URI url = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}")
-				.buildAndExpand(saveUser.getId()).toUri();
+		User savedUser = userDaoService.save(user);
+		java.net.URI location = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(savedUser.getId()).toUri();
 
-		return ResponseEntity.created(url).build();
+		return ResponseEntity.created(location).build();
 	}
 
 	@DeleteMapping("/deleteUser/{id}")
